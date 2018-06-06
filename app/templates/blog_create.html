@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<form method="POST", action="{{ url_for('blog_create') }}">
+  {{ form.hidden_tag() }}
+
+  {{ form.title.label }} {{ form.title(size=20) }}
+
+  {{ form.body.label }} {{ form.body }}
+
+  <input type="submit" value="Post">
+</form>
+
+{% endblock %}

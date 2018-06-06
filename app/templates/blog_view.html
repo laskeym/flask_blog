@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vs.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}">Edit</a>
+<a href="{{ url_for('blog_delete', post_id=post.id) }}">Delete</a>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h1>{{ post.title }}</h1>
+
+<h4>Written By: {{ post.created_by }}</h4>
+<h5>Posted: {{ post.time_in_words }}</h5>
+
+<p>{{ post.html_content }}</p>
+
+{% endblock %}
