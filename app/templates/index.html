@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <h1>Flask Blog</h1>
+  <a href="{{ url_for('blog_create') }}" class="btn btn-success mb-2">New Post</a>
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -22,7 +22,5 @@
       </div>
     </div>
   {% endfor %}
-
   <ul>
-  <a href="{{ url_for('blog_create') }}">Create New Post</a>
 {% endblock %}
