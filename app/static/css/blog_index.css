@@ -1,0 +1,36 @@
+
+
+.post-title:hover {
+  text-decoration: none;
+}
+
+#post-search {
+  letter-spacing: 1.5px;
+}
+
+#post-search:focus {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.fa.fa-search {
+  color: #95a5a6;
+}
+
+#search-btn:hover > .fa.fa-search {
+  color: #fff;
+}
+
+.post-title, .post-info, #post-search, #popular-posts-heading, .share {
+  text-transform: uppercase;
+}
+
+.post-synopsis {
+  line-height: 1.8;
+  word-wrap: nowrap;
+}
+
+#popular-posts li {
+  border-left: none;
+  border-right: none;
+}

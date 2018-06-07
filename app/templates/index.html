@@ -1,26 +1,89 @@
 {% extends "base.html" %}
 
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog_index.css') }}">
+{% endblock %}
+
 {% block body %}
-  <a href="{{ url_for('blog_create') }}" class="btn btn-success mb-2">New Post</a>
+  <div class="row">
+    <div class="col-sm-12 col-md-8">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-success">{{ message }}</div>
+      {% for post in posts.items %}
+        <div class="mb-5">
+          <div class="clearfix">
+            <h4><a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}" class="post-title">{{ post.title }}</a></h4>
+            <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="#">4 Comments</a></p>
+            <p class="post-synopsis">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa quidem sed eveniet, esse voluptate dolores fugiat. Quod, saepe est minima cumque cum veritatis perferendis soluta, officiis ut at. Molestiae animi debitis harum architecto perspiciatis voluptatum, dolore cupiditate temporibus perferendis eveniet! Nesciunt veniam quis laborum dolore nam veritatis eligendi suscipit doloremque nemo tempora sit vero, velit porro beatae numquam est. Vitae officia neque, voluptatem perspiciatis? Eius voluptatibus repellendus deleniti, fugit sunt blanditiis ut, dolores in debitis aliquid placeat! Sint consequuntur officiis est, sunt nihil perspiciatis rem, sit, iure doloribus consequatur vero voluptas? Doloribus tenetur, quibusdam cumque! Vel repellendus nobis nesciunt, aperiam eius iure magni fugiat atque, earum eaque at quos dicta voluptas, aliquam!</p>
+
+            <a href="#" class="float-right">Read More</a>
+          </div>
+          <div class="social-media-btns">
+            <span class="share mr-3">Share This:</span>
+            <a href="#" class="fab fa-facebook-square mr-3"><span class="ml-1">Facebook</span></a>
+            <a href="#" class="fab fa-twitter-square mr-3"><span class="ml-1">Twitter</span></a>
+            <a href="#" class="fab fa-google-plus-g mr-3"><span class="ml-1">Google+</span></a>
+          </div>
+        </div>
       {% endfor %}
-    {% endif %}
-  {% endwith %}
 
-  {% for post in posts %}
-    <div class="card">
-      <h5 class="card-header">
-        <a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}">{{ post.title }}</a>
-      </h5>
+      {% if prev_url %}
+        <a href="{{ prev_url }}">Previous</a>
+      {% endif %}
 
-      <div class="card-body">
-        <p class="card-text">{{ post.html_content }}</p>
-      </div>
+      {% for page in posts.iter_pages() %}
+        {% if page %}
+          {% if page != posts.page %}
+            <a href="{{ url_for('index', page=page) }}">{{ page }}</a>
+          {% else %}
+            <strong>{{ page }}</strong>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {% if next_url %}
+        <a href="{{ next_url }}">Next</a>
+      {% endif %}
     </div>
-  {% endfor %}
-  <ul>
+
+    <div class="col-md-4">
+      <form class="mb-4">
+        <div class="input-group">
+          <input type="search" placeholder="Search Posts" class="form-control py-2 border-right-0 border" id="post-search">
+          <span class="input-group-append">
+            <button class="btn btn-outline-secondary border-left-0 border" type="button" id="search-btn">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+
+      <h4 id="popular-posts-heading">Popular Posts</h4>
+      <ul class="list-group text-center" id="popular-posts">
+        <a href="#"><li class="list-group-item">Post 1</li></a>
+        <a href="#"><li class="list-group-item">Post 2</li></a>
+        <a href="#"><li class="list-group-item">Post 3</li></a>
+        <a href="#"><li class="list-group-item">Post 4</li></a>
+        <a href="#"><li class="list-group-item">Post 5</li></a>
+      </ul>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/succinct-master/jQuery.succinct.min.js') }}"></script>
+
+  <script>
+    $(function() {
+      $('.post-synopsis').succinct({
+        size: 500
+      });
+    });
+  </script>
 {% endblock %}
