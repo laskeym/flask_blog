@@ -9,27 +9,27 @@
 
 <div class="row mb-4">
   <div class="col-md-8 mx-auto">
-    <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}">Edit</a>
-    <a href="{{ url_for('blog_delete', post_id=post.id) }}">Delete</a>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashes">
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+    <div class="">
+      <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}" class="btn btn-warning mx-1">Edit</a>
+      <a href="{{ url_for('blog_delete', post_id=post.id) }}" class="btn btn-danger mx-1">Delete</a>
+    </div>
 
     <h1 class="text-center">{{ post.title }}</h1>
 
     <div class="text-center">
-      <p class="post-info"><i class="far fa-clock mx-1"></i> {{ post.time_in_words }} / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="#">4 Comments</a></p>
+      <p class="post-info"><i class="far fa-clock mx-1"></i> {{ post.time_in_words }} / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <span class="disqus-comment-count" data-disqus-identifier="{{ post.id }}"></span></p>
       <!--<span class="written-by">Written By: {{ post.created_by }}</span> |
       <span class="posted">{{ post.time_in_words }}</span> |
       <span class="comments">4 Comments</span>-->
     </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
     {{ post.html_content }}
 
