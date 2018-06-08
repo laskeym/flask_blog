@@ -10,4 +10,5 @@ class Config(object):
             .format(db=os.path.join(basedir, 'app.db'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Blog config
     POSTS_PER_PAGE = 3

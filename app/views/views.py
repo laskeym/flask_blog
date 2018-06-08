@@ -18,15 +18,6 @@ def index():
     prev_url = url_for('index', page=posts.prev_num) \
         if posts.has_prev else None
 
-    print('*'*75)
-    for page in posts.iter_pages():
-        if page:
-            if page != posts.page:
-                print('<a href="url_for("index", page=', page, ")>", page, "</a>")
-            else:
-                print('<strong>',page,'</strong>')
-    print('*'*75)
-
     return render_template('index.html', posts=posts,
                            next_url=next_url, prev_url=prev_url)
 

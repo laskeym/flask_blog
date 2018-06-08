@@ -1,4 +1,4 @@
-from app import db
+from app import app, db
 
 import datetime
 
@@ -18,6 +18,7 @@ import timeago
 SITE_WIDTH = 800
 oembed_providers = bootstrap_basic(OEmbedCache())
 
+
 class Posts(db.Model):
     __tablename__ = 'Posts'
 
@@ -29,7 +30,7 @@ class Posts(db.Model):
 
     @classmethod
     def all(cls):
-        return cls.query.order_by(sa.desc(cls.created_date)) # Return object
+        return cls.query.order_by(sa.desc(cls.created_date))  # Return object
 
     @classmethod
     def by_id(cls, id):
@@ -45,7 +46,8 @@ class Posts(db.Model):
 
     @property
     def html_content(self):
-        hilite = CodeHiliteExtension(linenums=False, css_class='highlight')
+        hilite = CodeHiliteExtension(linenums=False,
+                                     css_class='highlight my-3')
         extras = ExtraExtension()
         markdown_content = markdown(self.body, extensions=[hilite, extras])
         oembed_content = parse_html(
@@ -55,5 +57,3 @@ class Posts(db.Model):
             maxwidth=SITE_WIDTH)
 
         return Markup(oembed_content)
-
-

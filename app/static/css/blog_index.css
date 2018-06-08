@@ -1,6 +1,4 @@
-
-
-.post-title:hover {
+.post-title:hover, .social-media-btns a {
   text-decoration: none;
 }
 
@@ -28,6 +26,10 @@
 .post-synopsis {
   line-height: 1.8;
   word-wrap: nowrap;
+}
+
+.share {
+  font-weight: bold;
 }
 
 #popular-posts li {
