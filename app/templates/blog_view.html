@@ -7,24 +7,56 @@
 
 {% block body %}
 
-<a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}">Edit</a>
-<a href="{{ url_for('blog_delete', post_id=post.id) }}">Delete</a>
+<div class="row mb-4">
+  <div class="col-md-8 mx-auto">
+    <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}">Edit</a>
+    <a href="{{ url_for('blog_delete', post_id=post.id) }}">Delete</a>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class="flashes">
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-<h1>{{ post.title }}</h1>
+    <h1 class="text-center">{{ post.title }}</h1>
 
-<h4>Written By: {{ post.created_by }}</h4>
-<h5>Posted: {{ post.time_in_words }}</h5>
+    <div class="text-center">
+      <p class="post-info"><i class="far fa-clock mx-1"></i> {{ post.time_in_words }} / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="#">4 Comments</a></p>
+      <!--<span class="written-by">Written By: {{ post.created_by }}</span> |
+      <span class="posted">{{ post.time_in_words }}</span> |
+      <span class="comments">4 Comments</span>-->
+    </div>
 
-<p>{{ post.html_content }}</p>
+    {{ post.html_content }}
 
+    <div id="disqus_thread" class="mt-4"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+  var disqus_config = function () {
+  this.page.url = '{{ request.url }}';  // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = {{ post.id }}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  };
+
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = 'https://realmarklaskey.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<!--DISQUS COMMENT COUNT-->
+<script id="dsq-count-scr" src="//realmarklaskey.disqus.com/count.js" async></script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 {% endblock %}

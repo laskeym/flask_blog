@@ -19,7 +19,7 @@
         <div class="mb-5">
           <div class="clearfix">
             <h4><a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}" class="post-title">{{ post.title }}</a></h4>
-            <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="#">4 Comments</a></p>
+            <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="{{ request.url_root.rstrip('/') }}{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}#disqus_thread" data-disqus-identifier="{{ post.id }}">Comments</a></p>
             <p class="post-synopsis">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa quidem sed eveniet, esse voluptate dolores fugiat. Quod, saepe est minima cumque cum veritatis perferendis soluta, officiis ut at. Molestiae animi debitis harum architecto perspiciatis voluptatum, dolore cupiditate temporibus perferendis eveniet! Nesciunt veniam quis laborum dolore nam veritatis eligendi suscipit doloremque nemo tempora sit vero, velit porro beatae numquam est. Vitae officia neque, voluptatem perspiciatis? Eius voluptatibus repellendus deleniti, fugit sunt blanditiis ut, dolores in debitis aliquid placeat! Sint consequuntur officiis est, sunt nihil perspiciatis rem, sit, iure doloribus consequatur vero voluptas? Doloribus tenetur, quibusdam cumque! Vel repellendus nobis nesciunt, aperiam eius iure magni fugiat atque, earum eaque at quos dicta voluptas, aliquam!</p>
 
             <a href="#" class="float-right">Read More</a>
@@ -95,8 +95,8 @@
 {% endblock %}
 
 {% block scripts %}
+  <!--SUCCINCT JQUERY-->
   <script src="{{ url_for('static', filename='js/succinct-master/jQuery.succinct.min.js') }}"></script>
-
   <script>
     $(function() {
       $('.post-synopsis').succinct({
@@ -104,4 +104,6 @@
       });
     });
   </script>
+  <!--DISQUS COMMENT COUNT-->
+  <script id="dsq-count-scr" src="//realmarklaskey.disqus.com/count.js" async></script>
 {% endblock %}
