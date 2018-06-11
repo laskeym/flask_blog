@@ -15,59 +15,69 @@
         {% endif %}
       {% endwith %}
 
-      {% for post in posts.items %}
-        <div class="mb-5">
-          <div class="clearfix">
-            <h4><a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}" class="post-title">{{ post.title }}</a></h4>
-            <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="{{ request.url_root.rstrip('/') }}{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}#disqus_thread" data-disqus-identifier="{{ post.id }}">Comments</a></p>
-            <p class="post-synopsis">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa quidem sed eveniet, esse voluptate dolores fugiat. Quod, saepe est minima cumque cum veritatis perferendis soluta, officiis ut at. Molestiae animi debitis harum architecto perspiciatis voluptatum, dolore cupiditate temporibus perferendis eveniet! Nesciunt veniam quis laborum dolore nam veritatis eligendi suscipit doloremque nemo tempora sit vero, velit porro beatae numquam est. Vitae officia neque, voluptatem perspiciatis? Eius voluptatibus repellendus deleniti, fugit sunt blanditiis ut, dolores in debitis aliquid placeat! Sint consequuntur officiis est, sunt nihil perspiciatis rem, sit, iure doloribus consequatur vero voluptas? Doloribus tenetur, quibusdam cumque! Vel repellendus nobis nesciunt, aperiam eius iure magni fugiat atque, earum eaque at quos dicta voluptas, aliquam!</p>
+      <div class="clearfix mb-4">
+        <a href="{{ url_for('blog_create') }}" class="btn btn-info float-right">New Post</a>
+      </div>
+      {% if posts.items %}
+        {% for post in posts.items %}
+          <div class="mb-5">
+            <div class="clearfix">
+              <h4><a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}" class="post-title">{{ post.title }}</a></h4>
+              <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="{{ request.url_root.rstrip('/') }}{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}#disqus_thread" data-disqus-identifier="{{ post.id }}">Comments</a></p>
+              <p class="post-headline">{{ post.headline }}</p>
 
-            <a href="#" class="float-right">Read More</a>
+              <a href="#" class="float-right">Read</a>
+            </div>
+            <div class="social-media-btns">
+              <span class="share mr-3">Share This:</span>
+              <a href="#" class="fab fa-facebook-square mr-3"><span class="ml-1">Facebook</span></a>
+              <a href="https://twitter.com/intent/tweet?url={{ request.url }}" class="fab fa-twitter-square mr-3 twitter-share-button" target="_blank"><span class="ml-1">Twitter</span></a>
+              <a href="#" class="fab fa-google-plus-g mr-3"><span class="ml-1">Google+</span></a>
+            </div>
           </div>
-          <div class="social-media-btns">
-            <span class="share mr-3">Share This:</span>
-            <a href="#" class="fab fa-facebook-square mr-3"><span class="ml-1">Facebook</span></a>
-            <a href="#" class="fab fa-twitter-square mr-3"><span class="ml-1">Twitter</span></a>
-            <a href="#" class="fab fa-google-plus-g mr-3"><span class="ml-1">Google+</span></a>
-          </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
 
 
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-          {% if prev_url %}
-            <li class="page-item">
-              <a href="{{ prev_url }}" class="page-link" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-              </a>
-            </li>
-          {% endif %}
-          {% for page in posts.iter_pages() %}
-            {% if page %}
-              {% if page != posts.page %}
-                <li class="page-item"><a href="{{ url_for('index', page=page) }}" class="page-link">{{ page }}</a></li>
-              {% else %}
-                <li class="page-item active">
-                  <span class="page-link">
-                    {{ page }}
-                    <span class="sr-only">(current)</span>
-                  </span>
-                </li>
-              {% endif %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            {% if prev_url %}
+              <li class="page-item">
+                <a href="{{ prev_url }}" class="page-link" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
             {% endif %}
-          {% endfor %}
-          {% if next_url %}
-            <li class="page-item">
-              <a href="{{ next_url }}" class="page-link" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>
+            {% for page in posts.iter_pages() %}
+              {% if page %}
+                {% if page != posts.page %}
+                  <li class="page-item"><a href="{{ url_for('index', page=page) }}" class="page-link">{{ page }}</a></li>
+                {% else %}
+                  <li class="page-item active">
+                    <span class="page-link">
+                      {{ page }}
+                      <span class="sr-only">(current)</span>
+                    </span>
+                  </li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% if next_url %}
+              <li class="page-item">
+                <a href="{{ next_url }}" class="page-link" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      {% else %}
+
+        <p>No posts have been published!</p>
+
+      {% endif %}
     </div>
 
     <div class="col-md-4">

@@ -1,0 +1,18 @@
+textarea {
+  resize: none;
+}
+
+.form-group label {
+  font-size: 18px;
+}
+
+.form-control {
+  background-color: #F5F5F5;
+  border: 1px solid #CCCCCC;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.form-control:focus {
+  border-color: transparent !important;
+}

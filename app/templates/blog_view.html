@@ -9,9 +9,9 @@
 
 <div class="row mb-4">
   <div class="col-md-8 mx-auto">
-    <div class="">
-      <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}" class="btn btn-warning mx-1">Edit</a>
-      <a href="{{ url_for('blog_delete', post_id=post.id) }}" class="btn btn-danger mx-1">Delete</a>
+    <div class="mb-3 clearfix">
+      <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}" class="btn btn-warning float-left">Edit</a>
+      <a href="{{ url_for('blog_delete', post_id=post.id) }}" class="btn btn-danger float-right">Delete</a>
     </div>
 
     <h1 class="text-center">{{ post.title }}</h1>

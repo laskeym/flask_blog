@@ -34,6 +34,7 @@ def blog_create():
     form = NewPost()
     if form.validate_on_submit():
         new_post = Posts(title=form.data['title'],
+                         headline=form.data['headline'],
                          body=form.data['body'])
         db.session.add(new_post)
         db.session.commit()
@@ -66,6 +67,7 @@ def blog_edit(post_id, slug):
 
     if form.validate_on_submit():
         post.title = form.data['title']
+        post.headline = form.data['headline']
         post.body = form.data['body']
         db.session.commit()
 

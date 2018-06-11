@@ -24,9 +24,12 @@ class Posts(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
+    headline = db.Column(db.String)
     body = db.Column(db.String)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
     created_by = db.Column(db.Integer)
+    # views = db.Column(db.Integer)
+    # likes = db.Column(db.Integer)
 
     @classmethod
     def all(cls):
