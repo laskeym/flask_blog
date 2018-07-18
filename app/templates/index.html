@@ -81,11 +81,12 @@
     </div>
 
     <div class="col-md-4">
-      <form class="mb-4">
+      <form class="mb-4" action="{{ url_for('search') }}" method="get"0>
         <div class="input-group mx-2">
-          <input type="search" placeholder="Search Posts" class="form-control py-2 border-right-0 border" id="post-search">
+          <!-- <input type="search" placeholder="Search Posts" class="form-control py-2 border-right-0 border" id="post-search"> -->
+          {{ form.q(size=20, class='form-control', placeholder=form.q.label.text) }}
           <span class="input-group-append">
-            <button class="btn btn-outline-secondary border-left-0 border" type="button" id="search-btn">
+            <button class="btn btn-outline-secondary border-left-0 border" type="submit" id="search-btn">
               <i class="fa fa-search"></i>
             </button>
           </span>

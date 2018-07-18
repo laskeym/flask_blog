@@ -1,8 +1,8 @@
 from app import app, db
 from app.models import Posts
-from app.forms import NewPost
+from app.forms import NewPost, SearchForm
 
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 
 import codecs
 import markdown
@@ -18,8 +18,11 @@ def index():
     prev_url = url_for('index', page=posts.prev_num) \
         if posts.has_prev else None
 
+    form = SearchForm()
+
     return render_template('index.html', posts=posts,
-                           next_url=next_url, prev_url=prev_url)
+                           next_url=next_url, prev_url=prev_url,
+                           form=form)
 
 
 @app.route('/blog/<int:post_id>/<slug>')
@@ -79,3 +82,20 @@ def blog_edit(post_id, slug):
         return redirect(url)
 
     return render_template('blog_edit.html', form=form, post=post)
+
+
+@app.route('/blog/search')
+def search():
+    form = SearchForm()
+    if not form.validate():
+        return redirect(url_for('index'))
+    page = request.args.get('page', 1, type=int)
+    posts, total = Posts.search(request.args['q'], page, current_app.config['POSTS_PER_PAGE'])
+    next_url = url_for('search', q=form.data, page=page + 1) \
+        if total > page * current_app.config['POSTS_PER_PAGE'] else None
+    prev_url = url_for('search', q=form.data, page=page - 1) \
+        if page > 1 else None
+
+
+    return render_template('search.html',
+                           posts=posts, next_url=next_url, prev_url=prev_url)

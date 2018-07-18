@@ -10,5 +10,8 @@ class Config(object):
             .format(db=os.path.join(basedir, 'app.db'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # ELASTICSEARCH
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+    
     # Blog config
     POSTS_PER_PAGE = 3
