@@ -5,28 +5,29 @@
 {% endblock %}
 
 {% block body %}
-<div class="row mb-3">
-  <div class="col-md-8 mx-auto">
-    <h2>New Post</h2>
-    {{ url_for('blog_create') }}
-    <form method="POST" action="{{ url_for('blog_create') }}">
-      <div class="form-group">
-        {{ form.hidden_tag() }}
-      </div>
-      <div class="form-group">
-        <label for="post-title">{{ form.title.label }}</label>
-        {{ form.title(class_="form-control") }}
-      </div>
-      <div class="form-group">
-        <label for="post-title">{{ form.headline.label }}</label>
-        {{ form.headline(class_="form-control") }}
-      </div>
-      <div class="form-group">
-        <label for="post-body">{{ form.body.label }}</label>
-        {{ form.body(class_="form-control", rows="15", ) }}
-      </div>
-      <input type="submit" class="btn btn-info" value="Post">
-    </form>
+<div class="container">
+  <div class="row mb-3">
+    <div class="col-md-8 mx-auto">
+      <h2>New Post</h2>
+      <form method="POST" action="{{ url_for('blog_create') }}">
+        <div class="form-group">
+          {{ form.hidden_tag() }}
+        </div>
+        <div class="form-group">
+          <label for="post-title">{{ form.title.label }}</label>
+          {{ form.title(class_="form-control") }}
+        </div>
+        <div class="form-group">
+          <label for="post-title">{{ form.headline.label }}</label>
+          {{ form.headline(class_="form-control") }}
+        </div>
+        <div class="form-group">
+          <label for="post-body">{{ form.body.label }}</label>
+          {{ form.body(class_="form-control", rows="15", ) }}
+        </div>
+        <input type="submit" class="btn btn-info" value="Post">
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

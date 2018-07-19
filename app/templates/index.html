@@ -5,102 +5,141 @@
 {% endblock %}
 
 {% block body %}
-  <div class="row mb-4">
-    <div class="col-sm-12 col-md-8">
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-success">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-
-      <div class="clearfix mb-4">
-        <a href="{{ url_for('blog_create') }}" class="btn btn-info float-right">New Post</a>
-      </div>
-      {% if posts.items %}
-        {% for post in posts.items %}
-          <div class="mb-5">
-            <div class="clearfix">
-              <h4><a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}" class="post-title">{{ post.title }}</a></h4>
-              <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <a href="{{ request.url_root.rstrip('/') }}{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}#disqus_thread" data-disqus-identifier="{{ post.id }}">Comments</a></p>
-              <p class="post-headline">{{ post.headline }}</p>
-
-              <a href="#" class="float-right">Read</a>
-            </div>
-            <div class="social-media-btns">
-              <span class="share mr-3">Share This:</span>
-              <a href="#" class="fab fa-facebook-square mr-3"><span class="ml-1">Facebook</span></a>
-              <a href="https://twitter.com/intent/tweet?url={{ request.url }}" class="fab fa-twitter-square mr-3 twitter-share-button" target="_blank"><span class="ml-1">Twitter</span></a>
-              <a href="#" class="fab fa-google-plus-g mr-3"><span class="ml-1">Google+</span></a>
-            </div>
-          </div>
-        {% endfor %}
-
-
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            {% if prev_url %}
-              <li class="page-item">
-                <a href="{{ prev_url }}" class="page-link" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-            {% endif %}
-            {% for page in posts.iter_pages() %}
-              {% if page %}
-                {% if page != posts.page %}
-                  <li class="page-item"><a href="{{ url_for('index', page=page) }}" class="page-link">{{ page }}</a></li>
-                {% else %}
-                  <li class="page-item active">
-                    <span class="page-link">
-                      {{ page }}
-                      <span class="sr-only">(current)</span>
-                    </span>
-                  </li>
-                {% endif %}
-              {% endif %}
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-sm-12 col-md-8">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success">{{ message }}</div>
             {% endfor %}
-            {% if next_url %}
-              <li class="page-item">
-                <a href="{{ next_url }}" class="page-link" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-        </nav>
+          {% endif %}
+        {% endwith %}
 
-      {% else %}
-
-        <p>No posts have been published!</p>
-
-      {% endif %}
-    </div>
-
-    <div class="col-md-4">
-      <form class="mb-4" action="{{ url_for('search') }}" method="get"0>
-        <div class="input-group mx-2">
-          <!-- <input type="search" placeholder="Search Posts" class="form-control py-2 border-right-0 border" id="post-search"> -->
-          {{ form.q(size=20, class='form-control', placeholder=form.q.label.text) }}
-          <span class="input-group-append">
-            <button class="btn btn-outline-secondary border-left-0 border" type="submit" id="search-btn">
-              <i class="fa fa-search"></i>
-            </button>
-          </span>
+        {% if current_user.is_authenticated %}
+        <div class="clearfix mb-4">
+          <a href="{{ url_for('blog_create') }}" class="btn btn-info float-right">New Post</a>
         </div>
-      </form>
-
-      <h4 id="popular-posts-heading mx-2">Popular Posts</h4>
-      <ul class="list-group text-center mx-2" id="popular-posts">
-        <a href="#"><li class="list-group-item">Post 1</li></a>
-        <a href="#"><li class="list-group-item">Post 2</li></a>
-        <a href="#"><li class="list-group-item">Post 3</li></a>
-        <a href="#"><li class="list-group-item">Post 4</li></a>
-        <a href="#"><li class="list-group-item">Post 5</li></a>
-      </ul>
+        {% endif %}
+        {% if posts.items %}
+          {% for post in posts.items %}
+            <div class="mb-5 bg-white p-3">
+              <div class="clearfix">
+                <h4><a href="{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}" class="post-title">{{ post.title }}</a></h4>
+                <p class="post-info"><i class="far fa-clock mx-1"></i> <a href="#">{{ post.created_date.strftime('%A, %B %d, %Y') }}</a> / <i class="far fa-user mx-1"></i> <a href="#">{{ post.author.first_name }} {{ post.author.last_name }}</a> / <i class="far fa-comments mx-1"></i> <a href="{{ request.url_root.rstrip('/') }}{{ url_for('blog_view', post_id=post.id, slug=post.slug) }}#disqus_thread" data-disqus-identifier="{{ post.id }}">Comments</a></p>
+                <p class="post-headline">{{ post.headline }}</p>
+  
+                <a href="#" class="float-right">Read</a>
+              </div>
+              <div class="social-media-btns">
+                <span class="share mr-3">Share This:</span>
+                <a href="#" class="fab fa-facebook-square mr-3"><span class="ml-1">Facebook</span></a>
+                <a href="https://twitter.com/intent/tweet?url={{ request.url }}" class="fab fa-twitter-square mr-3 twitter-share-button" target="_blank"><span class="ml-1">Twitter</span></a>
+                <a href="#" class="fab fa-google-plus-g mr-3"><span class="ml-1">Google+</span></a>
+              </div>
+            </div>
+          {% endfor %}
+  
+  
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              {% if prev_url %}
+                <li class="page-item">
+                  <a href="{{ prev_url }}" class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+              {% endif %}
+              {% for page in posts.iter_pages() %}
+                {% if page %}
+                  {% if page != posts.page %}
+                    <li class="page-item"><a href="{{ url_for('index', page=page) }}" class="page-link">{{ page }}</a></li>
+                  {% else %}
+                    <li class="page-item active">
+                      <span class="page-link">
+                        {{ page }}
+                        <span class="sr-only">(current)</span>
+                      </span>
+                    </li>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if next_url %}
+                <li class="page-item">
+                  <a href="{{ next_url }}" class="page-link" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+  
+        {% else %}
+  
+          <p>No posts have been published!</p>
+  
+        {% endif %}
+      </div>
+  
+      <div class="col-md-4">
+        <form class="mb-4" action="{{ url_for('search') }}" method="get">
+          <div class="input-group mx-2">
+            <!-- <input type="search" placeholder="Search Posts" class="form-control py-2 border-right-0 border" id="post-search"> -->
+            {{ form.q(size=20, class='form-control', placeholder=form.q.label.text) }}
+            <span class="input-group-append">
+              <button class="btn btn-secondary bg-white border-left-0 border" type="submit" id="search-btn">
+                <i class="fa fa-search"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+  
+        <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+            <li class="nav-item m-0">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Popular Posts</a>
+            </li>
+            <li class="nav-item m-0">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Recent Posts</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <div class="item">
+                <a href="#">
+                  <h4>Post 1</h4>
+                  <p>Headliner</p>
+                </a>
+              </div>
+              <div class="item">
+                <a href="#">
+                  <h4>Post 2</h4>
+                  <p>Headliner</p>
+                </a>
+              </div>
+              <div class="item">
+                <a href="#">
+                  <h4>Post 3</h4>
+                  <p>Headliner</p>
+                </a>
+              </div>
+              <div class="item">
+                <a href="#">
+                  <h4>Post 4</h4>
+                  <p>Headliner</p>
+                </a>
+              </div>
+              <div class="item">
+                <a href="#">
+                  <h4>Post 5</h4>
+                  <p>Headliner</p>
+                </a>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit nihil excepturi earum facilis tempora doloremque sequi rem ullam in itaque!</div>
+          </div>
+      </div>
     </div>
   </div>
 {% endblock %}

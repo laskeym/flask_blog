@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 mx-auto">
+        <div class="card border-secondary justify-content-center">
+          <div class="card-header mb-2 bg-info">
+            <h5 class="text-white m-0">Sign In</h5>
+          </div>
+          <div class="card-body">
+            <form method="POST" action="{{ url_for('sign_in') }}">
+              {{ form.hidden_tag() }}
+
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-danger text-center">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+
+              <div class="form-group my-3">
+                {{ form.email.label }}
+                {{ form.email(class_="form-control", id_="email") }}
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else</small>
+              </div>
+
+              <div class="form-group my-3">
+                {{ form.password.label }}
+                {{ form.password(class_="form-control", id_="password") }}
+              </div>
+              
+              <div class="form-check my-3">
+                {{ form.remember_me(class_="form-check-input") }}
+                {{ form.remember_me.label }}
+              </div>
+
+              <div class="btn-group d-flex" role="group" aria-label="Sign In/Register">
+                {{ form.submit(class_="btn btn-outline-primary w-100 mr-2") }}
+                <a href="{{ url_for('register') }}" class="btn btn-outline-info w-100 ml-2">Register</a>
+              </div>
+
+              <div class="text-center mt-3">
+                <a href="#">Forgot Password?</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

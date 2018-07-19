@@ -6,34 +6,35 @@
 {% endblock %}
 
 {% block body %}
-
-<div class="row mb-4">
-  <div class="col-md-8 mx-auto">
-    <div class="mb-3 clearfix">
-      <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}" class="btn btn-warning float-left">Edit</a>
-      <a href="{{ url_for('blog_delete', post_id=post.id) }}" class="btn btn-danger float-right">Delete</a>
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-8 mx-auto">
+      <div class="mb-3 clearfix">
+        <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}" class="btn btn-warning float-left">Edit</a>
+        <a href="{{ url_for('blog_delete', post_id=post.id) }}" class="btn btn-danger float-right">Delete</a>
+      </div>
+  
+      <h1 class="text-center">{{ post.title }}</h1>
+  
+      <div class="text-center">
+        <p class="post-info"><i class="far fa-clock mx-1"></i> {{ post.time_in_words }} / <i class="far fa-user mx-1"></i> <a href="#">{{ post.author.first_name }} {{ post.author.last_name }}</a> / <i class="far fa-comments mx-1"></i> <span class="disqus-comment-count" data-disqus-identifier="{{ post.id }}"></span></p>
+        <!--<span class="written-by">Written By: {{ post.created_by }}</span> |
+        <span class="posted">{{ post.time_in_words }}</span> |
+        <span class="comments">4 Comments</span>-->
+      </div>
+  
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+  
+      {{ post.html_content }}
+  
+      <div id="disqus_thread" class="mt-4"></div>
     </div>
-
-    <h1 class="text-center">{{ post.title }}</h1>
-
-    <div class="text-center">
-      <p class="post-info"><i class="far fa-clock mx-1"></i> {{ post.time_in_words }} / <i class="far fa-user mx-1"></i> <a href="#">{{ post.created_by }}</a> / <i class="far fa-comments mx-1"></i> <span class="disqus-comment-count" data-disqus-identifier="{{ post.id }}"></span></p>
-      <!--<span class="written-by">Written By: {{ post.created_by }}</span> |
-      <span class="posted">{{ post.time_in_words }}</span> |
-      <span class="comments">4 Comments</span>-->
-    </div>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    {{ post.html_content }}
-
-    <div id="disqus_thread" class="mt-4"></div>
   </div>
 </div>
 {% endblock %}

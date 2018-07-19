@@ -15,8 +15,12 @@
   color: #95a5a6;
 }
 
+#search-btn:hover {
+  background-color: #f6f6f6 !important;
+}
+
 #search-btn:hover > .fa.fa-search {
-  color: #fff;
+  color: #000;
 }
 
 .post-title, .post-info, #post-search, #popular-posts-heading, .share {
@@ -35,4 +39,25 @@
 #popular-posts li {
   border-left: none;
   border-right: none;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+  background-color: #1F9BCF;
+  color: #fff;
+}
+
+#myTabContent .tab-pane {
+  border-top: none;
+}
+
+#myTabContent .tab-pane .item {
+  padding: 5px 10px;
+}
+
+#myTabContent .tab-pane .item a {
+  text-decoration: none;
+}
+
+#myTabContent .tab-pane .item:hover {
+
 }

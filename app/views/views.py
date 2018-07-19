@@ -1,8 +1,12 @@
+from werkzeug.urls import url_parse
+
 from app import app, db
-from app.models import Posts
-from app.forms import NewPost, SearchForm
+from app.models import Posts, Users
+from app.forms import NewPost, SearchForm, LoginForm, RegistrationForm
 
 from flask import render_template, flash, redirect, url_for, request, current_app
+
+from flask_login import current_user, login_user, logout_user
 
 import codecs
 import markdown
@@ -38,7 +42,8 @@ def blog_create():
     if form.validate_on_submit():
         new_post = Posts(title=form.data['title'],
                          headline=form.data['headline'],
-                         body=form.data['body'])
+                         body=form.data['body'],
+                         created_by=current_user.id)
         db.session.add(new_post)
         db.session.commit()
         flash('New post created successfully!')
@@ -99,3 +104,33 @@ def search():
 
     return render_template('search.html',
                            posts=posts, next_url=next_url, prev_url=prev_url)
+
+
+@app.route('/sign-in', methods=['GET', 'POST'])
+def sign_in():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid email or password')
+            return redirect(url_for('sign_in'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('sign_in.html', form=form)
+
+
+@app.route('/sign-out')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/register')
+def register():
+    form = RegistrationForm()
+    return render_template('register.html', form=form)

@@ -1,8 +1,11 @@
-from app import app, db
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from app import app, db, login
 from app.search import add_to_index, remove_from_index, query_index
 
 import datetime
 
+from flask_login import UserMixin
 import sqlalchemy as sa
 
 from flask import Markup
@@ -72,7 +75,7 @@ class Posts(SearchableMixin, db.Model):
     headline = db.Column(db.String)
     body = db.Column(db.String)
     created_date = db.Column(db.DateTime, default=datetime.datetime.now)
-    created_by = db.Column(db.Integer)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     # views = db.Column(db.Integer)
     # likes = db.Column(db.Integer)
 
@@ -105,3 +108,26 @@ class Posts(SearchableMixin, db.Model):
             maxwidth=SITE_WIDTH)
 
         return Markup(oembed_content)
+
+
+@login.user_loader
+def load_user(id):
+    return Users.query.get(int(id))
+
+
+class Users(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(120))
+    first_name = db.Column(db.String(64), nullable=False)
+    last_name = db.Column(db.String(64), nullable=False)
+    posts = db.relationship('Posts', backref='author', lazy='dynamic')
+
+    def __repr__(self):
+        return '<User {}'.format(self.email)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
