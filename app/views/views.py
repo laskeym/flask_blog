@@ -91,6 +91,9 @@ def blog_edit(post_id, slug):
 
 @app.route('/blog/search')
 def search():
+    """
+    Blog Search View
+    """
     form = SearchForm()
     if not form.validate():
         return redirect(url_for('index'))
@@ -108,13 +111,16 @@ def search():
 
 @app.route('/sign-in', methods=['GET', 'POST'])
 def sign_in():
+    """
+    Sign In Page
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid email or password')
+            flash('Invalid email or password', 'danger')
             return redirect(url_for('sign_in'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -126,11 +132,33 @@ def sign_in():
 
 @app.route('/sign-out')
 def logout():
+    """
+    Logout Page
+    """
     logout_user()
     return redirect(url_for('index'))
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Registration Page
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     form = RegistrationForm()
+    # Validate form
+    if form.validate_on_submit():
+        # Create new user and hash password
+        new_user = Users(email=form.data['email'], first_name=form.data['first_name'],
+        last_name=form.data['last_name'])
+        new_user.set_password(form.data['password'])
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Registration Successful!', 'success')
+
+        return redirect(url_for('sign_in'))
     return render_template('register.html', form=form)
