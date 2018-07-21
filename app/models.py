@@ -131,3 +131,13 @@ class Users(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.StringField(30))
+
+
+class TagJunction(db.Model):
+    blog_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id')) 
