@@ -9,12 +9,20 @@
 <div class="container">
   <div class="row mb-4">
     <div class="col-md-8 mx-auto">
+      {% if post.author.id == current_user.id %}
       <div class="mb-3 clearfix">
         <a href="{{ url_for('blog_edit', post_id=post.id, slug=post.slug) }}" class="btn btn-warning float-left">Edit</a>
         <a href="{{ url_for('blog_delete', post_id=post.id) }}" class="btn btn-danger float-right">Delete</a>
       </div>
+      {% endif %}
   
       <h1 class="text-center">{{ post.title }}</h1>
+
+      <div id="postTags">
+        {% for tag in tags %}
+        <span class="badge badge-pill badge-warning">{{ tag.tag }}</span>
+        {% endfor %}
+      </div>
   
       <div class="text-center">
         <p class="post-info"><i class="far fa-clock mx-1"></i> {{ post.time_in_words }} / <i class="far fa-user mx-1"></i> <a href="#">{{ post.author.first_name }} {{ post.author.last_name }}</a> / <i class="far fa-comments mx-1"></i> <span class="disqus-comment-count" data-disqus-identifier="{{ post.id }}"></span></p>

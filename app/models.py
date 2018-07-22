@@ -116,6 +116,8 @@ def load_user(id):
 
 
 class Users(UserMixin, db.Model):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(120))
@@ -134,10 +136,20 @@ class Users(UserMixin, db.Model):
 
 
 class Tag(db.Model):
+    __tablename__ = 'tag'
+
     id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.StringField(30))
+    tag = db.Column(db.String(32), nullable=False)
 
 
-class TagJunction(db.Model):
-    blog_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id')) 
+class FatJunction(db.Model):
+    """
+    Fat junction table to create relationships between the posts
+    and it's assets.
+    """
+    __tablename__ = 'fat_junction'
+
+    blog_id = db.Column(db.Integer, db.ForeignKey('posts.id'),
+                        primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'),
+                       primary_key=True)

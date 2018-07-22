@@ -1,7 +1,7 @@
 from werkzeug.urls import url_parse
 
 from app import app, db
-from app.models import Posts, Users
+from app.models import Posts, Users, FatJunction, Tag
 from app.forms import NewPost, SearchForm, LoginForm, RegistrationForm
 
 from flask import render_template, flash, redirect, url_for, request, current_app
@@ -33,7 +33,10 @@ def index():
 def blog_view(post_id, slug):
     post = Posts.by_id(post_id)
 
-    return render_template('blog_view.html', post=post)
+    tags = Tag.query.join(FatJunction, FatJunction.tag_id==Tag.id) \
+                         .filter(FatJunction.blog_id==post.id).all()
+
+    return render_template('blog_view.html', post=post, tags=tags)
 
 
 @app.route('/blog/create', methods=['GET', 'POST'])
@@ -59,6 +62,9 @@ def blog_create():
 @app.route('/blog/delete', methods=['GET'])
 def blog_delete():
     post = Posts.by_id(request.args.get('post_id'))
+    if post.author.id != current_user.id:
+        return redirect(url_for('index'))
+
     db.session.delete(post)
     db.session.commit()
 
@@ -71,8 +77,10 @@ def blog_delete():
 @app.route('/blog/<int:post_id>/<slug>/edit', methods=['GET', 'POST'])
 def blog_edit(post_id, slug):
     post = Posts.by_id(post_id)
-    form = NewPost(**post.__dict__)
+    if post.author.id != current_user.id:
+        return redirect(url_for('index'))
 
+    form = NewPost(**post.__dict__)
     if form.validate_on_submit():
         post.title = form.data['title']
         post.headline = form.data['headline']
